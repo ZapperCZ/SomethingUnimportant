@@ -23,6 +23,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -56,13 +57,7 @@ private static void extract() {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	
 
-	
-	
-	
-	
-	
 //	System.out.println(loadJSON);
 		try {
 		obj = new JSONObject(loadJSON);
@@ -127,12 +122,12 @@ public static double conv(double input,String from, String to, String velicina) 
 	for(int i1=0;i1<veliciny.size();i1++) {
 		if(veliciny.get(i1).name.equals(velicina)) {
 			for(int i2=0;i2<veliciny.get(i1).units.size();i2++) {
-				if(veliciny.get(i1).units.get(i2).shortcut.equals(from)) {
+				if(veliciny.get(i1).units.get(i2).name.equals(from)) {
 					vysledek=veliciny.get(i1).units.get(i2).conversion*input;
 				}
 			}
 			for(int i2=0;i2<veliciny.get(i1).units.size();i2++) {
-				if(veliciny.get(i1).units.get(i2).shortcut.equals(to)) {
+				if(veliciny.get(i1).units.get(i2).name.equals(to)) {
 					vysledek=vysledek/veliciny.get(i1).units.get(i2).conversion;
 				} 
 			}
@@ -155,7 +150,7 @@ public static void main(String[] args){
 public void start(Stage primaryStage) throws Exception {
 	// TODO Auto-generated method stub
 	double rw=400;
-	double rh=150;
+	double rh=300;
 	
 
 
@@ -164,21 +159,70 @@ public void start(Stage primaryStage) throws Exception {
 	Scene scene=new Scene(vb,rw,rh);
 	
 	ChoiceBox vel = new ChoiceBox();
+	ChoiceBox jed1=new ChoiceBox();
+	ChoiceBox jed2=new ChoiceBox();
+	TextArea input=new TextArea();
+	TextArea output=new TextArea();
+	for(int d2=0;d2<veliciny.get(0).units.size();d2++) {
+		jed1.getItems().add(veliciny.get(0).units.get(d2).name);
+		jed2.getItems().add(veliciny.get(0).units.get(d2).name);
+		//veliciny.get(0).units
+	}
+	jed1.getSelectionModel().selectFirst();
+	jed2.getSelectionModel().selectFirst();
+	
 	int d1=0;
 	for(d1=0;d1<veliciny.size();d1++) {
 		vel.getItems().add(veliciny.get(d1).name);
 		}
-	vel.getItems().add("brambora");
+	//vel.getItems().add("brambora");
 	vel.getSelectionModel().selectFirst();
-	
 	vel.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 		  @Override
 		  public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-		    System.out.println(vel.getItems().get((Integer) number2));
+		    //System.out.println(vel.getItems().get((Integer) number2));
+		    jed1.getItems().clear();
+		    jed2.getItems().clear();
+		  
+		    int pos = (Integer) number2;
+		    for(int d2=0;d2<veliciny.get(pos).units.size();d2++) {
+				jed1.getItems().add(veliciny.get(pos).units.get(d2).name);
+				jed2.getItems().add(veliciny.get(pos).units.get(d2).name);
+			}
+		    jed1.getSelectionModel().selectFirst();
+		    jed2.getSelectionModel().selectFirst();
 		  }
 		});
+	jed1.setTranslateY(50);
+	jed2.setTranslateY(170);
+	input.setTranslateY(100);
+	input.setMaxHeight(15);
+	input.setMaxWidth(150);
+	output.setTranslateY(220);
+	output.setMaxHeight(15);
+	output.setMaxWidth(150);
+	output.setEditable(false);
+	
+	input.textProperty().addListener(new ChangeListener<String>() {
+	    @Override
+	    public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+	        //System.out.println(input.getText());
+	        double obsah= Double.valueOf(input.getText());
+	        String from = jed1.getSelectionModel().getSelectedItem().toString();
+	        String to = jed2.getSelectionModel().getSelectedItem().toString();
+	        String velicina = vel.getSelectionModel().getSelectedItem().toString();
+	        //System.out.println(obsah+" "+from+" "+to+" "+velicina );
+	        double fin = conv(obsah,from,to,velicina);
+	        //System.out.println(fin);
+	        
+	        output.setText(String.valueOf(fin));
+	    }
+	});
+	
+	
+	
 	StackPane sp=new StackPane();
-	sp.getChildren().addAll(vel);
+	sp.getChildren().addAll(vel,jed1,jed2,input,output);
 	sp.setAlignment(Pos.BASELINE_CENTER);
 	((VBox)scene.getRoot()).getChildren().addAll(sp);
 	primaryStage.setScene(scene);
