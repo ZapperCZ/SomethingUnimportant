@@ -115,6 +115,39 @@ public static boolean isNumber(String input)
 	}else {return false;}
 	
 }
+public static String performConv(String from,String to,String velicina, String hodnota) {
+	double fin=0;
+	try {
+    	double obsah;
+    	if (hodnota.equals("")) {
+    		obsah=0;
+    	}
+    	else
+    	{
+    		if(!(isNumber(hodnota)))
+    		{
+    			throw new Exception("Letters not allowed");
+    		}else 
+    		{
+    			obsah= Double.valueOf(hodnota);
+    		}
+    	}
+    	
+
+
+        //String from = jed1.getSelectionModel().getSelectedItem().toString();
+        //String to = jed2.getSelectionModel().getSelectedItem().toString();
+        //String velicina = vel.getSelectionModel().getSelectedItem().toString();
+        fin = conv(obsah,from,to,velicina);
+        
+        //output.setText(String.valueOf(fin));
+    	} catch (Exception e) {
+    		Alert alert = new Alert(AlertType.WARNING,e.getMessage());
+    		alert.showAndWait();
+    		input.setText("");
+    	}
+	return String.valueOf(fin);
+}
 public static void dump() {
 	int d1=0;
 	for(d1=0;d1<veliciny.size();d1++) {
@@ -146,6 +179,7 @@ public static double conv(double input,String from, String to, String velicina) 
 	return vysledek;
 	
 }
+static TextArea input;
 public static void main(String[] args){
 	
 	extract();
@@ -170,7 +204,7 @@ public void start(Stage primaryStage) throws Exception {
 	ChoiceBox vel = new ChoiceBox();
 	ChoiceBox jed1=new ChoiceBox();
 	ChoiceBox jed2=new ChoiceBox();
-	TextArea input=new TextArea();
+	input=new TextArea();
 	TextArea output=new TextArea();
 	for(int d2=0;d2<veliciny.get(0).units.size();d2++) {
 		jed1.getItems().add(veliciny.get(0).units.get(d2).name);
@@ -184,7 +218,7 @@ public void start(Stage primaryStage) throws Exception {
 	for(d1=0;d1<veliciny.size();d1++) {
 		vel.getItems().add(veliciny.get(d1).name);
 		}
-	//vel.getItems().add("brambora");
+
 	vel.getSelectionModel().selectFirst();
 	vel.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 		  @Override
@@ -202,6 +236,24 @@ public void start(Stage primaryStage) throws Exception {
 		    jed2.getSelectionModel().selectFirst();
 		  }
 		});
+	jed1.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>(){
+
+		@Override
+		public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+			// TODO Auto-generated method stub
+			output.setText(performConv(jed1.getSelectionModel().getSelectedItem().toString(),jed2.getSelectionModel().getSelectedItem().toString(),vel.getSelectionModel().getSelectedItem().toString(),input.getText()));
+		}
+		
+	});
+	jed2.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>(){
+
+		@Override
+		public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+			// TODO Auto-generated method stub
+			output.setText(performConv(jed1.getSelectionModel().getSelectedItem().toString(),jed2.getSelectionModel().getSelectedItem().toString(),vel.getSelectionModel().getSelectedItem().toString(),input.getText()));
+		}
+		
+	});
 	jed1.setTranslateY(50);
 	jed2.setTranslateY(170);
 	input.setTranslateY(100);
@@ -216,37 +268,7 @@ public void start(Stage primaryStage) throws Exception {
 	    @Override
 	    public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
 	        //System.out.println(input.getText());
-	    	try {
-	    	double obsah;
-	    	if (input.getText().equals("")) {
-	    		obsah=0;
-	    	}
-	    	else
-	    	{
-	    		if(!(isNumber(input.getText())))
-	    		{
-	    			throw new Exception("Letters not allowed");
-	    		}else 
-	    		{
-	    			obsah= Double.valueOf(input.getText());
-	    		}
-	    	}
-	    	
-	
-
-	        String from = jed1.getSelectionModel().getSelectedItem().toString();
-	        String to = jed2.getSelectionModel().getSelectedItem().toString();
-	        String velicina = vel.getSelectionModel().getSelectedItem().toString();
-	        //System.out.println(obsah+" "+from+" "+to+" "+velicina );
-	        double fin = conv(obsah,from,to,velicina);
-	        //System.out.println(fin);
-	        
-	        output.setText(String.valueOf(fin));
-	    	} catch (Exception e) {
-	    		Alert alert = new Alert(AlertType.WARNING,e.getMessage());
-	    		alert.showAndWait();
-	    		input.setText("");
-	    	}
+	    	output.setText(performConv(jed1.getSelectionModel().getSelectedItem().toString(),jed2.getSelectionModel().getSelectedItem().toString(),vel.getSelectionModel().getSelectedItem().toString(),input.getText()));
 	    }
 	});
 	
