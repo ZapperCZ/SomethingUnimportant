@@ -20,6 +20,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
@@ -105,6 +107,13 @@ private static void extract() {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	} 
+}
+public static boolean isNumber(String input) 
+{
+	if(input.matches("[0-9]+")) {
+		return true;
+	}else {return false;}
+	
 }
 public static void dump() {
 	int d1=0;
@@ -207,7 +216,24 @@ public void start(Stage primaryStage) throws Exception {
 	    @Override
 	    public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
 	        //System.out.println(input.getText());
-	        double obsah= Double.valueOf(input.getText());
+	    	try {
+	    	double obsah;
+	    	if (input.getText().equals("")) {
+	    		obsah=0;
+	    	}
+	    	else
+	    	{
+	    		if(!(isNumber(input.getText())))
+	    		{
+	    			throw new Exception("Letters not allowed");
+	    		}else 
+	    		{
+	    			obsah= Double.valueOf(input.getText());
+	    		}
+	    	}
+	    	
+	
+
 	        String from = jed1.getSelectionModel().getSelectedItem().toString();
 	        String to = jed2.getSelectionModel().getSelectedItem().toString();
 	        String velicina = vel.getSelectionModel().getSelectedItem().toString();
@@ -216,6 +242,11 @@ public void start(Stage primaryStage) throws Exception {
 	        //System.out.println(fin);
 	        
 	        output.setText(String.valueOf(fin));
+	    	} catch (Exception e) {
+	    		Alert alert = new Alert(AlertType.WARNING,e.getMessage());
+	    		alert.showAndWait();
+	    		input.setText("");
+	    	}
 	    }
 	});
 	
