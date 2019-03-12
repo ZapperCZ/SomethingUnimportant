@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>PacMan</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>src/resources/pacman_close.png</name>
+			<type>1</type>
+			<location>D:/Bordel/PacMan/pacman_close.png</location>
+		</link>
+		<link>
+			<name>src/resources/pacman_open.png</name>
+			<type>1</type>
+			<location>D:/Bordel/PacMan/pacman_open.png</location>
+		</link>
+	</linkedResources>
+</projectDescription>
