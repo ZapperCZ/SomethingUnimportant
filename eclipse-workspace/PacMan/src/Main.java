@@ -60,7 +60,7 @@ public class Main extends Application{
 		new AnimationTimer() {
 			
 			public void handle(long currentNanoTime) {
-				double t = (currentNanoTime-startNanoTime) / 1000000000.0;
+				double t = (currentNanoTime-startNanoTime) / 100000000.0;
 				
 				int curr=(int) t;
 				if(curr>it) {
